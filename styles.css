@@ -1,0 +1,62 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap');
+
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; scroll-padding-top: 100px; }
+body { margin: 0; color: #252525; font-family: Inter, Arial, sans-serif; background: #f6f5f1; }
+a { color: inherit; text-decoration: none; }
+button { font: inherit; cursor: pointer; }
+:focus-visible { outline: 3px solid #dcb87e; outline-offset: 5px; }
+.header { min-height: 84px; padding: 0 5.5%; display: flex; align-items: center; justify-content: space-between; gap: 24px; background: #262626; color: #fff; position: sticky; top: 0; z-index: 100; box-shadow: 0 0 0 transparent; transition: background-color 280ms ease, box-shadow 280ms ease; }
+.header.is-scrolled { background-color: #202020f5; box-shadow: 0 6px 24px #00000030; }
+.header .wordmark { transform-origin: left center; transition: transform 280ms ease; }
+.header.is-scrolled .wordmark { transform: scale(.94); }
+.wordmark { display: inline-flex; align-items: center; gap: 13px; line-height: 1; font-weight: 700; }
+.wordmark strong { font-size: 37px; letter-spacing: -.11em; padding-right: 14px; border-right: 1px solid #777; }
+.wordmark span, nav a, .menu-toggle { text-transform: uppercase; font-size: 13px; font-weight: 800; }
+nav { display: flex; align-items: center; gap: clamp(20px, 4vw, 65px); }
+nav a:hover, .text-link:hover { color: #e4bd82; }
+.menu-toggle { display: none; background: transparent; border: 0; color: #fff; }
+.hero { min-height: min(760px, calc(100svh - 84px)); position: relative; isolation: isolate; display: flex; align-items: center; color: white; background: #353535; padding: 90px 8% 115px; }
+.hero > img, .hero::after { position: absolute; inset: 0; width: 100%; height: 100%; z-index: -1; }
+.hero > img { object-fit: cover; }
+.hero::after { content: ''; background: linear-gradient(90deg, #121212cf, #14141455 70%, #14141438), linear-gradient(0deg, #14141485, transparent 38%); }
+.eyebrow { font-size: .82rem; font-weight: 800; letter-spacing: .14em; text-transform: uppercase; }
+h1, h2 { line-height: .98; letter-spacing: -.055em; margin: 20px 0 30px; }
+h1 { font-size: clamp(3.1rem, 7.7vw, 8rem); font-weight: 800; }
+h2 { font-size: clamp(2.7rem, 5.9vw, 6rem); }
+.text-link { display: inline-flex; gap: 26px; align-items: center; padding: 12px 0; border-bottom: 1px solid currentColor; font-weight: 700; }
+.controls { position: absolute; right: 5.5%; bottom: 28px; display: flex; align-items: center; gap: 10px; }
+.controls span { font-size: .8rem; margin-right: 10px; }
+.controls button { color: white; border: 1px solid #ffffff80; background: #17171740; width: 46px; height: 46px; }
+.controls button:hover { background: white; color: #262626; }
+.section { padding: clamp(56px, 9vw, 130px) 8%; }
+.section > p:not(.eyebrow) { max-width: 42ch; font-size: 1.1rem; line-height: 1.65; }
+.sectors { background: #e9e6de; }
+.tiles { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-top: 32px; }
+figure { margin: 0; position: relative; background: #353535; color: white; }
+figure img { width: 100%; aspect-ratio: 4 / 5; object-fit: cover; display: block; }
+figcaption { position: absolute; inset: auto 0 0; padding: 90px 22px 24px; background: linear-gradient(transparent,#141414f5 55%); font-size: clamp(1.15rem, 2.5vw, 2rem); font-weight: 700; }
+.contact, footer { background: #262626; color: white; }
+footer { padding: 22px 8%; border-top: 1px solid #ffffff33; }
+@media (max-width: 640px) {
+  html { scroll-padding-top: 84px; }
+  .header { min-height: 68px; }
+  .menu-toggle { display: inline-flex; align-items: center; gap: 10px; padding: 12px 0; }
+  nav { display: none; position: absolute; inset: 100% 0 auto; background: #262626; padding: 10px 5.5% 25px; }
+  nav.is-open { display: grid; gap: 0; }
+  nav a { padding: 14px 0; }
+  .hero { min-height: min(660px, calc(100svh - 68px)); }
+  .tiles { grid-template-columns: 1fr; }
+  figure img { aspect-ratio: 16 / 10; }
+}
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } .header, .header .wordmark { transition: none; } }
+
+figcaption h3 { margin: 0 0 12px; font-size: inherit; line-height: 1.15; letter-spacing: -.03em; }
+figcaption p { margin: 0; font-size: .95rem; line-height: 1.55; font-weight: 400; }
+@media (min-width: 641px) and (max-width: 1000px) {
+  .tiles { grid-template-columns: 1fr; }
+  figure img { aspect-ratio: 16 / 9; }
+}
+@media (max-width: 400px) {
+  figure img { aspect-ratio: 1; }
+}
