@@ -13,7 +13,15 @@ npm run dev
 
 Vite abre automáticamente http://127.0.0.1:5190/ en el navegador. Para generar la versión de producción en `dist/`, ejecuta `npm run build`.
 
-Los sectores son ilustrativos. La sección de contacto queda pendiente de los datos oficiales.
+Los sectores son ilustrativos.
+
+## Formulario de contacto
+
+La sección `#contactanos` incluye un formulario (nombre, empresa, correo, teléfono y mensaje) que envía los datos por correo mediante [FormSubmit](https://formsubmit.co), sin backend ni claves privadas.
+
+- El correo de destino está en la constante `CONTACT_EMAIL` al inicio de `site.jsx` (actualmente `jmedina@tsgenviro.com`). Para cambiarlo, edita esa línea y vuelve a publicar.
+- **Activación:** la primera vez que se envíe el formulario a un correo nuevo, FormSubmit manda a ese correo un mensaje con el enlace "Activate Form". Hasta hacer clic en él, los envíos no se entregan. Esto se repite cada vez que se cambie el correo de destino.
+- El formulario incluye un campo oculto anti-spam (`_honey`).
 
 ## Publicación en Netlify
 

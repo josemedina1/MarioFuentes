@@ -5,6 +5,11 @@ import exportsImage from './assets/exportacion.jpg';
 import importsImage from './assets/importacion.jpg';
 import './styles.css';
 
+// Correo que recibe los mensajes del formulario "Contáctanos".
+// Para cambiar el destino basta con modificar esta constante.
+const CONTACT_EMAIL = 'jmedina@tsgenviro.com';
+const CONTACT_ENDPOINT = `https://formsubmit.co/ajax/${CONTACT_EMAIL}`;
+
 const navigation = [
   ['#sobre-nosotros', 'Sobre nosotros'],
   ['#sector-de-negocios', 'Sector de negocios'],
@@ -34,6 +39,87 @@ const slides = [
     description: 'Revisión documental y seguimiento de las operaciones de ingreso de mercancías, desde su llegada hasta su entrega.',
   },
 ];
+
+function ContactForm() {
+  const [status, setStatus] = useState('idle');
+  const [feedback, setFeedback] = useState('');
+
+  async function handleSubmit(event) {
+    event.preventDefault();
+    const form = event.currentTarget;
+    const data = Object.fromEntries(new FormData(form));
+
+    // Campo trampa para bots: si viene con contenido, se ignora el envío.
+    if (data._honey) return;
+
+    setStatus('sending');
+    setFeedback('');
+
+    try {
+      const response = await fetch(CONTACT_ENDPOINT, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+        body: JSON.stringify({
+          Nombre: data.nombre,
+          Empresa: data.empresa || '—',
+          Correo: data.correo,
+          Teléfono: data.telefono || '—',
+          Mensaje: data.mensaje,
+          _replyto: data.correo,
+          _subject: `Nuevo contacto desde el sitio web: ${data.nombre}`,
+          _template: 'table',
+        }),
+      });
+      const result = await response.json().catch(() => ({}));
+
+      if (!response.ok || String(result.success) !== 'true') {
+        throw new Error(result.message || 'No fue posible enviar el mensaje.');
+      }
+
+      form.reset();
+      setStatus('success');
+      setFeedback('¡Gracias! Recibimos tu mensaje y te responderemos a la brevedad.');
+    } catch (error) {
+      setStatus('error');
+      setFeedback('No pudimos enviar tu mensaje. Por favor, inténtalo nuevamente en unos minutos.');
+      console.error('Error al enviar el formulario de contacto:', error);
+    }
+  }
+
+  const sending = status === 'sending';
+
+  return (
+    <form className="contact-form" onSubmit={handleSubmit}>
+      <div className="field">
+        <label htmlFor="contact-nombre">Nombre <span aria-hidden="true">*</span></label>
+        <input id="contact-nombre" name="nombre" type="text" autoComplete="name" required maxLength={120} />
+      </div>
+      <div className="field">
+        <label htmlFor="contact-empresa">Empresa</label>
+        <input id="contact-empresa" name="empresa" type="text" autoComplete="organization" maxLength={120} />
+      </div>
+      <div className="field">
+        <label htmlFor="contact-correo">Correo electrónico <span aria-hidden="true">*</span></label>
+        <input id="contact-correo" name="correo" type="email" autoComplete="email" required maxLength={160} />
+      </div>
+      <div className="field">
+        <label htmlFor="contact-telefono">Teléfono</label>
+        <input id="contact-telefono" name="telefono" type="tel" autoComplete="tel" maxLength={30} placeholder="+56 9 1234 5678" />
+      </div>
+      <div className="field field-full">
+        <label htmlFor="contact-mensaje">Mensaje <span aria-hidden="true">*</span></label>
+        <textarea id="contact-mensaje" name="mensaje" rows={5} required maxLength={3000} />
+      </div>
+      <input className="honeypot" type="text" name="_honey" tabIndex={-1} autoComplete="off" aria-hidden="true" />
+      <div className="form-footer field-full">
+        <button className="submit-button" type="submit" disabled={sending}>
+          {sending ? 'Enviando…' : 'Enviar mensaje'} <span aria-hidden="true">↗</span>
+        </button>
+        <p className={`form-feedback ${status}`} role="status" aria-live="polite">{feedback}</p>
+      </div>
+    </form>
+  );
+}
 
 function App() {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -113,7 +199,8 @@ function App() {
         <section className="section contact" id="contactanos">
           <p className="eyebrow">Contáctanos</p>
           <h2>Conversemos.</h2>
-          <p>Los datos de contacto estarán disponibles próximamente.</p>
+          <p>Cuéntanos sobre tu operación de comercio exterior y te responderemos a la brevedad.</p>
+          <ContactForm />
         </section>
       </main>
       <footer>Mario Fuentes</footer>
